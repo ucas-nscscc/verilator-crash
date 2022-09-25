@@ -16,4 +16,8 @@ int main() {
     nvboard_update();
     top.single_cycle();
   }
+
+  top.close_sim();
+
+  return 0;
 }

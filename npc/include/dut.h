@@ -19,6 +19,17 @@ public:
   void reset(int n);
 
   TOP_NAME* getDut() { return &dut; }
+#ifdef OPEN_WAVE
+  void init_wave();
+  bool wave_continue();
+  void dump_wave();
+  void close_wave();
+#else
+  void init_wave() {}
+  bool wave_continue() { return true; }
+  void dump_wave() {}
+  void close_wave() {}
+#endif
 };
 
 #endif
