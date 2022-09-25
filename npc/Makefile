@@ -38,7 +38,7 @@ all:
 	@echo "Write this Makefile by your self."
 
 compile_hw: $(VSRCS)
-	@echo "Compiling RTL code"
+	@echo "Compiling RTL code..."
 	$(VERILATOR) $(addprefix -CFLAGS , $(CFLAGS)) --cc --Mdir $(OBJ_DIR) --trace $^
 	@echo "Done."
 
