@@ -6,7 +6,7 @@ SHELL_NAME=$(basename $(echo $SHELL))
 function addenv() {
   sed -i -e "/^export $1=.*/d" ~/.${SHELL_NAME}rc
   echo "export $1=`readlink -e $2`" >> ~/.${SHELL_NAME}rc
-  echo "you need to run 'source ~/.${SHELL_NAME}rc' by yourself"
+  echo "you should run 'source ~/.${SHELL_NAME}rc' by yourself"
 }
 
 # usage: init repo branch directory trace [env]
