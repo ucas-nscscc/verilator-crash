@@ -1,13 +1,12 @@
 #!/bin/bash
 
+SHELL_NAME=$(basename $(echo $SHELL))
+
 # usage: addenv env_name path
 function addenv() {
-  sed -i -e "/^export $1=.*/d" ~/.zshrc
-  echo "export $1=`readlink -e $2`" >> ~/.zshrc
-  echo "By default this script will add environment variables into ~/.zshrc."
-  echo "After that, please run 'source ~/.zshrc' to let these variables take effect."
-  echo "If you use shell other than zsh, please add these environment variables manually."
-  source ~/.zshrc
+  sed -i -e "/^export $1=.*/d" ~/.$(SHELL_NAME)rc
+  echo "export $1=`readlink -e $2`" >> ~/.$(SHELL_NAME)rc
+  source ~/.$(SHELL_NAME)rc
 }
 
 # usage: init repo branch directory trace [env]
