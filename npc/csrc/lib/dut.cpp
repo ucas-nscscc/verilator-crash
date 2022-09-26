@@ -1,4 +1,3 @@
-#include <Vexample.h>
 #include <dut.h>
 #include "verilated_vcd_c.h"
 

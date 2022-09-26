@@ -1,7 +1,7 @@
 #ifndef _DUT_H
 #define _DUT_H
 
-#include <Vexample.h>
+#include <generated/vheader.h>
 
 class Dut {
 private:

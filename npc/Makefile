@@ -1,4 +1,4 @@
-TOPNAME = example
+TOPNAME ?= example
 NXDC_FILES = constr/top.nxdc
 INC_PATH ?=
 
@@ -34,13 +34,24 @@ CFLAGS=-Wall
 CFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
 LDFLAGS += -lSDL2 -lSDL2_image
 
+$(shell mkdir -p $(NPC_HOME)/include/generated)
+
 all:
 	@echo "Write this Makefile by your self."
 
 compile_hw: $(VSRCS)
 	@echo "Compiling RTL code..."
-	$(VERILATOR) $(addprefix -CFLAGS , $(CFLAGS)) --cc --Mdir $(OBJ_DIR) --trace $^
+	$(VERILATOR) --top-module $(TOPNAME) $^ \
+		$(addprefix -CFLAGS , $(CFLAGS)) \
+		--cc --Mdir $(OBJ_DIR) --trace
 	@echo "Done."
+
+.PHONY: $(NPC_HOME)/include/generated/vheader.h
+$(NPC_HOME)/include/generated/vheader.h:
+	@echo "#ifndef _VHEADER_H" > $(NPC_HOME)/include/generated/vheader.h
+	@echo "#define _VHEADER_H" >> $(NPC_HOME)/include/generated/vheader.h
+	@echo "#include <V$(TOPNAME).h>" >> $(NPC_HOME)/include/generated/vheader.h
+	@echo "#endif" >> $(NPC_HOME)/include/generated/vheader.h
 
 compile_sim: $(VSRCS) $(SIM_CSRCS) $(LIB_CSRCS)
 # $(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
@@ -51,8 +62,8 @@ compile_sim: $(VSRCS) $(SIM_CSRCS) $(LIB_CSRCS)
 		--cc --Mdir $(OBJ_DIR) --exe --build --trace
 	@echo "Done."
 
-run_sim: compile_sim
-	@build/obj_dir/Vexample
+run_sim: $(NPC_HOME)/include/generated/vheader.h compile_sim
+	@build/obj_dir/V$(TOPNAME)
 
 $(BIN): $(VSRCS) $(NVB_CSRCS) $(NVBOARD_ARCHIVE) $(LIB_CSRCS)
 	@rm -rf $(OBJ_DIR)
@@ -61,10 +72,11 @@ $(BIN): $(VSRCS) $(NVB_CSRCS) $(NVBOARD_ARCHIVE) $(LIB_CSRCS)
 		$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
-run_nvboard: $(BIN)
+run_nvboard: $(NPC_HOME)/include/generated/vheader.h $(BIN)
 	@./$(BIN)
 
 clean:
 	rm -rf *.vcd build
+	rm -rf include/generated
 
 include ../Makefile
