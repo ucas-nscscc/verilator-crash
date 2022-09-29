@@ -45,13 +45,11 @@ bash init.sh subproject-name
 
 请先参考["一生一芯"预学习阶段讲义](https://ysyx.oscc.cc/docs/prestudy/prestudy.html)构建基本开发环境.
 
-使用该框架需要先克隆南京大学的 nvboard 项目, 具体方法为
+通过 `set-env.sh` 脚本初始化环境并设置环境变量：
 
-```bash
-bash init.sh nvboard
+```sh
+$ source set-env.sh
 ```
-
-此外, 若使用的 shell 不是 bash, 需要手动设置环境变量 `NVBOARD_HOME` 为 nvboard 项目的根目录.
 
 若要运行该项目, 需在 shell 中进入 `npc/` 目录, 然后使用 `make`, 目前支持的参数如下:
 
@@ -66,6 +64,8 @@ bash init.sh nvboard
 ![nvboard-exec-example](./img/nvboard-exec-example.png)
 
 现象为 LED 灯由右至左依次亮起, 并不断循环.
+
+同时, 可设置变量 `TOPNAME` 为顶层模块名, 例如：`make run_sim TOPNAME=mux`, 缺省的 `TOPNAME` 为 `example`.
 
 ## TODO
 
